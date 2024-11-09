@@ -1,31 +1,292 @@
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Hello, World!</title>
-	</head>
-	<body>
-		<h1 id="heading"></h1>
-		<button id="button">Fetch a random UUID</button>
-		<div id="random"></div>
-		<script>
-			fetch('/message')
-				.then((resp) => resp.text())
-				.then((text) => {
-					const h1 = document.getElementById('heading');
-					h1.textContent = text;
-				});
-
-			const button = document.getElementById("button");
-			button.addEventListener("click", () => {
-				fetch('/random')
-					.then((resp) => resp.text())
-					.then((text) => {
-						const random = document.getElementById('random');
-						random.textContent = text;
-					});
-			});
-		</script>
-	</body>
+<html dir="ltr" lang="en" class="offline">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#fff" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>Chrome Dino Game</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="scripts/utils.js"></script>
+    <script src="scripts/mobile.js"></script>
+    <script src="scripts/engine.js"></script>
+    <script src="scripts/state.js"></script>
+  </head>
+  <body
+    id="t"
+    class="neterror"
+    style="
+      font-family: &quot;Segoe UI&quot;, Tahoma, sans-serif;
+      font-size: 75%;
+    "
+    jstcache="0"
+  >
+    <div id="main-frame-error" class="interstitial-wrapper" jstcache="0">
+      <div id="main-content" jstcache="0">
+        <div
+          class="icon icon-offline"
+          jstcache="0"
+          style="visibility: hidden"
+        ></div>
+        <div id="main-message" jstcache="0">
+          <h1 jstcache="0">
+            <span jsselect="heading" jsvalues=".innerHTML:msg" jstcache="9"
+              >Press space to play</span
+            >
+            <a
+              id="error-information-button"
+              class="hidden"
+              onclick="toggleErrorInformationPopup()"
+              jstcache="0"
+            ></a>
+          </h1>
+          <p
+            jsselect="summary"
+            jsvalues=".innerHTML:msg"
+            jstcache="1"
+            style="display: none"
+          ></p>
+          <div id="error-information-popup-container" jstcache="0">
+            <div id="error-information-popup" jstcache="0">
+              <div id="error-information-popup-box" jstcache="0">
+                <div id="error-information-popup-content" jstcache="0">
+                  <div
+                    id="suggestions-list"
+                    style="display: none"
+                    jsdisplay="(suggestionsSummaryList &amp;&amp; suggestionsSummaryList.length)"
+                    jstcache="16"
+                  >
+                    <p
+                      jsvalues=".innerHTML:suggestionsSummaryListHeader"
+                      jstcache="18"
+                    ></p>
+                    <ul
+                      jsvalues=".className:suggestionsSummaryList.length == 1 ? 'single-suggestion' : ''"
+                      jstcache="19"
+                    >
+                      <li
+                        jsselect="suggestionsSummaryList"
+                        jsvalues=".innerHTML:summary"
+                        jstcache="21"
+                      ></li>
+                    </ul>
+                  </div>
+                  <div
+                    class="error-code"
+                    jscontent="errorCode"
+                    jstcache="17"
+                  ></div>
+                  <p id="error-information-popup-close" jstcache="0">
+                    <a
+                      class="link-button"
+                      jscontent="closeDescriptionPopup"
+                      onclick="toggleErrorInformationPopup()"
+                      jstcache="20"
+                      >null</a
+                    >
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="download-links-wrapper" class="hidden" jstcache="0">
+            <div id="download-link-wrapper" jstcache="0">
+              <a
+                id="download-link"
+                class="link-button"
+                onclick="downloadButtonClick()"
+                jsselect="downloadButton"
+                jscontent="msg"
+                jsvalues=".disabledText:disabledMsg"
+                jstcache="6"
+                style="display: none"
+              ></a>
+            </div>
+            <div id="download-link-clicked-wrapper" class="hidden" jstcache="0">
+              <div
+                id="download-link-clicked"
+                class="link-button"
+                jsselect="downloadButton"
+                jscontent="disabledMsg"
+                jstcache="11"
+                style="display: none"
+              ></div>
+            </div>
+          </div>
+          <div id="save-page-for-later-button" class="hidden" jstcache="0">
+            <a
+              class="link-button"
+              onclick="savePageLaterClick()"
+              jsselect="savePageLater"
+              jscontent="savePageMsg"
+              jstcache="10"
+              style="display: none"
+            ></a>
+          </div>
+          <div
+            id="cancel-save-page-button"
+            class="hidden"
+            onclick="cancelSavePageClick()"
+            jsselect="savePageLater"
+            jsvalues=".innerHTML:cancelMsg"
+            jstcache="4"
+            style="display: none"
+          ></div>
+          <div
+            id="offline-content-list"
+            class="list-hidden"
+            hidden
+            jstcache="0"
+          >
+            <div
+              id="offline-content-list-visibility-card"
+              onclick="toggleOfflineContentListVisibility(!0)"
+              jstcache="0"
+            >
+              <div
+                id="offline-content-list-title"
+                jsselect="offlineContentList"
+                jscontent="title"
+                jstcache="12"
+                style="display: none"
+              ></div>
+              <div jstcache="0">
+                <div
+                  id="offline-content-list-show-text"
+                  jsselect="offlineContentList"
+                  jscontent="showText"
+                  jstcache="14"
+                  style="display: none"
+                ></div>
+                <div
+                  id="offline-content-list-hide-text"
+                  jsselect="offlineContentList"
+                  jscontent="hideText"
+                  jstcache="15"
+                  style="display: none"
+                ></div>
+              </div>
+            </div>
+            <div id="offline-content-suggestions" jstcache="0"></div>
+            <div id="offline-content-list-action" jstcache="0">
+              <a
+                class="link-button"
+                onclick="launchDownloadsPage()"
+                jsselect="offlineContentList"
+                jscontent="actionText"
+                jstcache="13"
+                style="display: none"
+              ></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="buttons" class="nav-wrapper suggested-left" jstcache="0">
+        <div id="control-buttons" hidden jstcache="0">
+          <button
+            id="reload-button"
+            class="blue-button text-button"
+            onclick="reloadButtonClick(this.url)"
+            jsselect="reloadButton"
+            jsvalues=".url:reloadUrl"
+            jscontent="msg"
+            jstcache="5"
+            style="display: none"
+          ></button>
+          <button
+            id="download-button"
+            class="blue-button text-button"
+            onclick="downloadButtonClick()"
+            jsselect="downloadButton"
+            jscontent="msg"
+            jsvalues=".disabledText:disabledMsg"
+            jstcache="6"
+            style="display: none"
+          ></button>
+        </div>
+        <button
+          id="details-button"
+          class="secondary-button text-button small-link singular"
+          onclick="detailsButtonClick(),toggleHelpBox()"
+          jscontent="details"
+          jsdisplay="(suggestionsDetails &amp;&amp; suggestionsDetails.length > 0) || diagnose"
+          jsvalues=".detailsText:details; .hideDetailsText:hideDetails;"
+          jstcache="2"
+          style="display: none"
+        ></button>
+      </div>
+      <div id="details" class="hidden" jstcache="0">
+        <div
+          class="suggestions"
+          jsselect="suggestionsDetails"
+          jstcache="3"
+          style="display: none"
+        >
+          <div
+            class="suggestion-header"
+            jsvalues=".innerHTML:header"
+            jstcache="7"
+          ></div>
+          <div
+            class="suggestion-body"
+            jsvalues=".innerHTML:body"
+            jstcache="8"
+          ></div>
+        </div>
+      </div>
+      <div
+        role="application"
+        tabindex="0"
+        title="Dino game, play"
+        class="runner-container"
+      >
+        <canvas
+          class="runner-canvas"
+          width="600"
+          height="150"
+          style="width: 600px; height: 150px"
+        ></canvas
+        ><span class="offline-runner-live-region" aria-live="assertive"
+          >Dino game. A pixelated dinosaur dodges cacti and pterodactyls as it
+          runs across a desolate landscape. When you hear an audio cue, press
+          space to jump over obstacles.</span
+        >
+      </div>
+      <label class="slow-speed-option hidden"
+        >Start slower<input
+          type="checkbox"
+          title="Start slower"
+          tabindex="0"
+          checked /><span class="slow-speed-toggle"></span
+      ></label>
+    </div>
+    <div id="sub-frame-error" jstcache="0">
+      <div class="icon" jstcache="0"></div>
+      <div
+        id="sub-frame-error-details"
+        jsselect="summary"
+        jsvalues=".innerHTML:msg"
+        jstcache="1"
+        style="display: none"
+      ></div>
+    </div>
+    <div id="offline-resources" jstcache="0">
+      <img id="offline-resources-1x" src="images/objects-1x.png" jstcache="0" />
+      <img
+        id="offline-resources-2x"
+        src="images/objects-2x.png"
+        jstcache="0"
+      /><template id="audio-resources" jstcache="0"
+        ><audio id="offline-sound-press" src="sounds/press.ogx"></audio
+        ><audio id="offline-sound-hit" src="sounds/hit.ogx"></audio
+        ><audio id="offline-sound-reached" src="sounds/reached.ogx"></audio
+      ></template>
+    </div>
+    <script jstcache="0" src="scripts/template.js"></script>
+    <script jstcache="0" src="scripts/time.js"></script>
+    <script jstcache="0" src="scripts/page.js"></script>
+  </body>
 </html>
