@@ -10,3 +10,8 @@ assets = { directory = "./public", binding = "ASSETS" }
 # Configuration: https://developers.cloudflare.com/workers/observability/logs/workers-logs/#enable-workers-logs
 [observability]
 enabled = true
+
+
+[[kv_namespaces]]
+binding = "leaderboard"
+id = "8f1de07ee0e04b0da06421240f6aca5e"
