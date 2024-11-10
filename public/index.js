@@ -4,6 +4,9 @@ function init() {
 		username = window.prompt('Enter a username (for game leaderboard)');
 		localStorage.setItem('username', username);
 	}
+
+	registerServiceWorker();
+	setTimeout(showLeaderboard, 1000);
 }
 
 async function postHighScore(score) {
@@ -18,5 +21,23 @@ async function showLeaderboard() {
 	ol.innerHTML = list.map((i) => `<li>${Object.keys(i)[0]} - ${Object.values(i)[0]}</li>`).join('');
 }
 
-setTimeout(showLeaderboard, 1000);
+const registerServiceWorker = async () => {
+	if ('serviceWorker' in navigator) {
+		try {
+			const registration = await navigator.serviceWorker.register('/sw.js', {
+				scope: '/',
+			});
+			if (registration.installing) {
+				console.log('Service worker installing');
+			} else if (registration.waiting) {
+				console.log('Service worker installed');
+			} else if (registration.active) {
+				console.log('Service worker active');
+			}
+		} catch (error) {
+			console.error(`Registration failed with ${error}`);
+		}
+	}
+};
+
 init();
