@@ -1,4 +1,4 @@
-const CACHE_NAME = 'v2';
+const CACHE_NAME = 'v3';
 const addResourcesToCache = async (resources) => {
 	const cache = await caches.open(CACHE_NAME);
 	await cache.addAll(resources);
