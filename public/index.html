@@ -7,6 +7,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
 		<title>Chrome Dino Game</title>
 		<link rel="icon" type="image/x-icon" href="favicon.ico" />
+		<link rel="manifest" href="manifest.json" />
 		<link rel="stylesheet" href="style.css" />
 		<script src="scripts/utils.js"></script>
 		<script src="scripts/mobile.js"></script>
@@ -15,6 +16,8 @@
 		<script src="index.js"></script>
 	</head>
 	<body id="t" class="neterror" style="font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 75%" jstcache="0">
+		<div hidden id="install-banner" class="banner top">Install game 🚀</div>
+
 		<div id="main-frame-error" class="interstitial-wrapper" jstcache="0">
 			<div id="main-content" jstcache="0">
 				<div class="icon icon-offline" jstcache="0" style="visibility: hidden"></div>
@@ -196,6 +199,8 @@
 			<summary>Leaderboard</summary>
 			<ol id="leaderboard"></ol>
 		</details>
+
+		<div hidden id="offline-banner" class="banner bottom">You're offline</div>
 		<script jstcache="0" src="scripts/template.js"></script>
 		<script jstcache="0" src="scripts/time.js"></script>
 		<script jstcache="0" src="scripts/page.js"></script>

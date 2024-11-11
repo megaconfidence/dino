@@ -1,12 +1,35 @@
-function init() {
+let installPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (event) => {
+	event.preventDefault();
+	installPrompt = event;
+	const installBanner = document.getElementById('install-banner');
+	installBanner.removeAttribute('hidden');
+
+	installBanner.addEventListener('click', async (e) => {
+		if (!installPrompt) return;
+		await installPrompt.prompt();
+		installPrompt = null;
+		installBanner.setAttribute('hidden', '');
+	});
+});
+
+window.addEventListener('offline', () => {
+	document.getElementById('offline-banner').removeAttribute('hidden');
+});
+
+window.addEventListener('online', () => {
+	document.getElementById('offline-banner').setAttribute('hidden', '');
+});
+
+async function init() {
 	let username = localStorage.getItem('username');
 	if (!username) {
 		username = window.prompt('Enter a username (for game leaderboard)');
 		localStorage.setItem('username', username);
 	}
-
-	registerServiceWorker();
-	setTimeout(showLeaderboard, 1000);
+	await registerServiceWorker();
+	await showLeaderboard();
 }
 
 async function postHighScore(score) {
@@ -16,9 +39,9 @@ async function postHighScore(score) {
 }
 
 async function showLeaderboard() {
-	const ol = document.getElementById('leaderboard');
 	const list = await fetch('/api/score').then((r) => r.json());
-	ol.innerHTML = list.map((i) => `<li>${Object.keys(i)[0]} - ${Object.values(i)[0]}</li>`).join('');
+	const scores = list.map((i) => `<li>${Object.keys(i)[0]} - ${Object.values(i)[0]}</li>`).join('');
+	document.getElementById('leaderboard').innerHTML = scores;
 }
 
 const registerServiceWorker = async () => {

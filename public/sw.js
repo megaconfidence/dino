@@ -1,5 +1,6 @@
+const CACHE_NAME = 'v2';
 const addResourcesToCache = async (resources) => {
-	const cache = await caches.open('v1');
+	const cache = await caches.open(CACHE_NAME);
 	await cache.addAll(resources);
 };
 
@@ -28,16 +29,26 @@ self.addEventListener('install', (event) => {
 			'/sounds/reached.ogx',
 			'/style.css',
 			'/favicon.ico',
+			'/manifest.json',
+			'/icons/192.png',
+			'/icons/512.png',
 		]),
 	);
 });
 
+const deleteOldCaches = async () => {
+	const keyList = await caches.keys();
+	const cachesToDelete = keyList.filter((k) => k !== CACHE_NAME);
+	await Promise.all(cachesToDelete.map((k) => caches.delete(k)));
+};
+
 self.addEventListener('activate', (event) => {
+	event.waitUntil(deleteOldCaches());
 	event.waitUntil(clients.claim());
 });
 
 const putInCache = async (request, response) => {
-	const cache = await caches.open('v1');
+	const cache = await caches.open(CACHE_NAME);
 	await cache.put(request, response);
 };
 
