@@ -1207,13 +1207,13 @@ ol {
 	text-align: center;
 	letter-spacing: 1.5px;
 	cursor: pointer;
-}
-.banner.bottom {
 	position: absolute;
 	width: 100%;
-	bottom: 0;
-	opacity: 0.2;
+	top: 0;
 	left: 0;
+}
+.banner.bottom {
+	z-index: 10;
 }
 
 @media (max-width: 420px) {
